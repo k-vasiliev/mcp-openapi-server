@@ -17,7 +17,7 @@ This guide walks through the process of deploying the OpenAPI MCP Server with To
 3. Connect your GitHub account and select the repository
 4. Configure the following environment variables in the Railway dashboard:
    - `API_BASE_URL` = `https://api.todoist.com/rest/v2`
-   - `OPENAPI_SPEC_PATH` = `./todoist.yaml`
+   - `OPENAPI_SPEC_PATH` = `./todoist.json`
    - `API_HEADERS` = `Authorization:Bearer YOUR_TODOIST_API_TOKEN`
    - `SERVER_NAME` = `todoist-mcp-server` (or your preferred name)
    - `SERVER_VERSION` = `1.0.0`
@@ -48,7 +48,7 @@ This guide walks through the process of deploying the OpenAPI MCP Server with To
 
 5. Set up environment variables:
    ```bash
-   railway variables set API_BASE_URL=https://api.todoist.com/rest/v2 OPENAPI_SPEC_PATH=./todoist.yaml API_HEADERS="Authorization:Bearer YOUR_TODOIST_API_TOKEN" SERVER_NAME=todoist-mcp-server SERVER_VERSION=1.0.0
+   railway variables set API_BASE_URL=https://api.todoist.com/rest/v2 OPENAPI_SPEC_PATH=./todoist.json API_HEADERS="Authorization:Bearer YOUR_TODOIST_API_TOKEN" SERVER_NAME=todoist-mcp-server SERVER_VERSION=1.0.0
    ```
 
 ## Connecting to Claude
@@ -76,4 +76,4 @@ Once deployed, you'll need to configure Claude to use your deployed MCP server:
 
 - Check Railway logs for any errors
 - Verify your Todoist API token is valid
-- Ensure the todoist.yaml OpenAPI specification is correctly formatted 
+- Ensure the todoist.json OpenAPI specification is correctly formatted 

@@ -23,7 +23,7 @@ RUN npm install --ignore-scripts
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 
-# Copy the OpenAPI spec (JSON version)
+# Copy the OpenAPI spec (JSON only)
 COPY todoist.json ./todoist.json
 
 # Build the application manually
@@ -31,6 +31,9 @@ RUN node build.js && chmod +x bin/mcp-server.js
 
 # Patch the bundle to fix the yargs issue
 RUN node fix-yargs.js
+
+# Create debug script to print environment variables during startup
+RUN echo '#!/bin/sh\necho "OPENAPI_SPEC_PATH=$OPENAPI_SPEC_PATH"\necho "Arguments: $@"\nexec "$@"' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 # Set environment variables with default values
 ENV SERVER_NAME="todoist-mcp-server"
@@ -41,5 +44,6 @@ ENV API_BASE_URL="https://api.todoist.com/rest/v2"
 # Expose port for Railway (though not actually needed since it's stdio-based)
 EXPOSE 8080
 
-# Start the MCP server with explicit parameters (using srv-version to avoid yargs warning)
+# Start the MCP server with debug and explicit parameters
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["node", "./bin/mcp-server.js", "--api-base-url", "https://api.todoist.com/rest/v2", "--openapi-spec", "./todoist.json", "--name", "todoist-mcp-server", "--srv-version", "1.0.0"] 
