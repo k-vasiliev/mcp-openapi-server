@@ -1,1 +1,1 @@
-web: node ./bin/mcp-server.js 
+web: node ./bin/mcp-server.js --api-base-url https://api.todoist.com/rest/v2 --openapi-spec ./todoist.yaml 

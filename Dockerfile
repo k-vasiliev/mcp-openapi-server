@@ -32,9 +32,10 @@ RUN node build.js && chmod +x bin/mcp-server.js
 ENV SERVER_NAME="todoist-mcp-server"
 ENV SERVER_VERSION="1.0.0"
 ENV OPENAPI_SPEC_PATH="./todoist.yaml"
+ENV API_BASE_URL="https://api.todoist.com/rest/v2"
 
 # Expose port for Railway (though not actually needed since it's stdio-based)
 EXPOSE 8080
 
-# Start the MCP server
-CMD ["node", "./bin/mcp-server.js"] 
+# Start the MCP server with explicit parameters
+CMD ["node", "./bin/mcp-server.js", "--api-base-url", "https://api.todoist.com/rest/v2", "--openapi-spec", "./todoist.yaml"] 
