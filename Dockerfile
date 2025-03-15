@@ -17,8 +17,8 @@ RUN mkdir -p bin dist
 # Copy bin directory
 COPY bin/ ./bin/
 
-# Install dependencies (skip prepare script to avoid build errors)
-RUN npm ci --ignore-scripts
+# Install dependencies (using install instead of ci to handle new dependencies)
+RUN npm install --ignore-scripts
 
 # Copy source files
 COPY src/ ./src/
@@ -27,8 +27,7 @@ COPY scripts/ ./scripts/
 # Copy the OpenAPI spec
 COPY todoist.yaml ./todoist.yaml
 
-# Convert YAML to JSON (adding the yaml package first)
-RUN npm install yaml
+# Convert YAML to JSON
 RUN node parse-yaml.js ./todoist.yaml
 
 # Build the application manually
