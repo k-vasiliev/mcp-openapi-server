@@ -8,7 +8,6 @@ COPY build.js ./
 COPY tsconfig.json ./
 COPY .eslintrc.json ./
 COPY mcp-specs.d.ts ./
-COPY parse-yaml.js ./
 COPY fix-yargs.js ./
 
 # Create required directories
@@ -24,11 +23,8 @@ RUN npm install --ignore-scripts
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 
-# Copy the OpenAPI spec
-COPY todoist.yaml ./todoist.yaml
-
-# Convert YAML to JSON
-RUN node parse-yaml.js ./todoist.yaml
+# Copy the OpenAPI spec (JSON version)
+COPY todoist.json ./todoist.json
 
 # Build the application manually
 RUN node build.js && chmod +x bin/mcp-server.js
