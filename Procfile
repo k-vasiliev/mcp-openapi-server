@@ -1,0 +1,1 @@
+web: node ./bin/mcp-server.js 
