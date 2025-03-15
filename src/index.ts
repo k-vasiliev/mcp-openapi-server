@@ -2,16 +2,16 @@
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { OpenAPIV3 } from "openapi-types";
+import {
+    CallToolRequestSchema, // Changed from ExecuteToolRequestSchema
+    ListToolsRequestSchema,
+    Tool,
+} from "@modelcontextprotocol/sdk/types.js";
 import axios from "axios";
 import { readFile } from "fs/promises";
+import { OpenAPIV3 } from "openapi-types";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import {
-  ListToolsRequestSchema,
-  CallToolRequestSchema, // Changed from ExecuteToolRequestSchema
-  Tool,
-} from "@modelcontextprotocol/sdk/types.js";
 
 interface OpenAPIMCPServerConfig {
   name: string;
@@ -112,7 +112,15 @@ class OpenAPIMCPServer {
       } else {
         // Load from local file
         const content = await readFile(this.config.openApiSpec, "utf-8");
-        return JSON.parse(content) as OpenAPIV3.Document;
+        
+        // We expect JSON format, but handle errors gracefully
+        try {
+          return JSON.parse(content) as OpenAPIV3.Document;
+        } catch (error) {
+          console.error(`Failed to parse ${this.config.openApiSpec} as JSON: ${error.message}`);
+          console.error("Please make sure the OpenAPI spec is in JSON format, not YAML");
+          throw new Error(`Failed to parse OpenAPI spec as JSON. Please convert YAML to JSON.`);
+        }
       }
     }
     return this.config.openApiSpec as OpenAPIV3.Document;
@@ -328,4 +336,5 @@ async function main(): Promise<void> {
 
 main();
 
-export { OpenAPIMCPServer, loadConfig };
+export { loadConfig, OpenAPIMCPServer };
+
